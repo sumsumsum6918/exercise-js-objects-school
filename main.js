@@ -80,7 +80,12 @@ const asignToTeach = (targetTeacher, targetSubject) => {
   });
 };
 
+const removeStudentFromSubject = (targetStudent, targetSubject) => {};
+
+const removeTeahcerFromSubject = (targetTeacher, targetSubject) => {};
+
 console.log("===== Start of term =====");
+//#region start of term
 registerAllStudentsToSchool();
 registerAllTeachersToSchool();
 enrollAllStudentsToSubject("mathematics");
@@ -105,6 +110,13 @@ console.log("Students details");
 console.log(students);
 console.log("Teachers details");
 console.log(teachers);
+//#endregion
+
+console.log(
+  "===== Beginning of term: Students change their choice of subjects ====="
+);
+//removeStudentFromSubject("student1", "chemistry")
+//removeTeahcerFromSubject("teacher1", "chemistry")
 
 /*export const addStudent = (_this, student) => {
   _this.students.push(student);
