@@ -1,6 +1,58 @@
 import { teachers } from "./data/teachers.js";
 import { subjects } from "./data/subjects.js";
 import { students } from "./data/students.js";
+import { teknikhogskolan } from "./data/school.js";
+
+const addStudentToSubject = (targetStudent, targetSubject) => {
+  subjects.forEach((subject) => {
+    if (subject.name !== targetSubject) return;
+
+    if (subject.name === targetSubject) {
+      if (subject.students.includes(targetStudent)) return;
+      else {
+        subject.addStudent(targetStudent);
+      }
+    }
+  });
+  return subjects;
+};
+
+const addAllStudentsToSubject = (targetSubject) => {
+  subjects.forEach((subject) => {
+    if (subject.name !== targetSubject) return;
+    if (subject.name === targetSubject) {
+      subject.students = [];
+      students.forEach((student) => {
+        subject.addStudent(student);
+      });
+    }
+  });
+};
+
+const addAllStudentToSchool = () => {
+  teknikhogskolan.students = [];
+  students.forEach((student) => {
+    teknikhogskolan.addStudent(student.name);
+  });
+};
+
+console.log("Start of term");
+addAllStudentToSchool();
+addAllStudentsToSubject("mathematics");
+addStudentToSubject("student1", "chemistry");
+addStudentToSubject("student2", "chemistry");
+addStudentToSubject("student3", "chemistry");
+addStudentToSubject("student3", "biology");
+addStudentToSubject("student4", "biology");
+addStudentToSubject("student5", "biology");
+addAllStudentsToSubject("mathematics");
+
+console.log(teknikhogskolan);
+console.log(subjects);
+
+/*export const addStudent = (_this, student) => {
+  _this.students.push(student);
+};*/
 
 /*
 const addSubjectToTeacher = (addSubject, targetTeacher) => {
@@ -48,14 +100,3 @@ const addStudentToSubjects = (addStudent, targetSubject) => {
 };
 
 addStudentToSubjects("student1", "mathematics");*/
-
-const addStudentToSubject = (addStudent, targetSubject) => {
-  subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return;
-    if (subject.name === targetSubject) {
-      subject.addStudent(addStudent);
-    }
-  });
-  return subjects;
-};
-console.log(addStudentToSubject("student1", "mathematics"));
