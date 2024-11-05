@@ -1,14 +1,14 @@
 export const teachers = [
   {
     name: "teacher1",
-    subject: [],
+    subjects: [],
     addSubject: function (subject) {
       this.subjects.push(subject);
     },
   },
   {
     name: "teacher2",
-    subject: [],
+    subjects: [],
     addSubject: function (subject) {
       this.subjects.push(subject);
     },

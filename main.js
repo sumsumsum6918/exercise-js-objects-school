@@ -3,65 +3,108 @@ import { subjects } from "./data/subjects.js";
 import { students } from "./data/students.js";
 import { teknikhogskolan } from "./data/school.js";
 
-const addStudentToSubject = (targetStudent, targetSubject) => {
+const enrollStudentToSubject = (targetStudent, targetSubject) => {
   subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return;
+    if (subject.name !== targetSubject) return; //early return for other subjects
 
     if (subject.name === targetSubject) {
-      if (subject.students.includes(targetStudent)) return;
-      else {
+      if (!subject.students.includes(targetStudent)) {
         subject.addStudent(targetStudent);
       }
+
+      students.forEach((student) => {
+        if (student.name !== targetStudent) return; //early return for other students
+        if (
+          student.name === targetStudent &&
+          !student.subjects.includes(targetSubject)
+        ) {
+          student.enlistToSubject(targetSubject);
+        }
+      });
     }
   });
-  return subjects;
 };
 
-const addAllStudentsToSubject = (targetSubject) => {
+const enrollAllStudentsToSubject = (targetSubject) => {
   subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return;
+    if (subject.name !== targetSubject) return; //early return for other subjects
+
     if (subject.name === targetSubject) {
-      subject.students = [];
+      subject.students = []; //reset array to prevent doubling values and double calling same function
       students.forEach((student) => {
         subject.addStudent(student);
       });
 
       students.forEach((student) => {
-        if (student.subjects) student.enlistToSubject(targetSubject);
+        //enroll the subject to students details
+        if (!student.subjects.includes(targetSubject))
+          student.enlistToSubject(targetSubject);
       });
     }
   });
 };
 
-const addAllStudentsToSchool = () => {
+const registerAllStudentsToSchool = () => {
   teknikhogskolan.students = [];
   students.forEach((student) => {
     teknikhogskolan.addStudent(student.name);
   });
 };
 
-const addAllTeachersToSchool = () => {
+const registerAllTeachersToSchool = () => {
   teknikhogskolan.teachers = [];
   teachers.forEach((teacher) => {
     teknikhogskolan.addTeacher(teacher.name);
   });
 };
 
-console.log("Start of term");
-addAllStudentsToSchool();
-addAllTeachersToSchool();
-addAllStudentsToSubject("mathematics");
-addStudentToSubject("student1", "chemistry");
-addStudentToSubject("student2", "chemistry");
-addStudentToSubject("student3", "chemistry");
-addStudentToSubject("student3", "biology");
-addStudentToSubject("student4", "biology");
-addStudentToSubject("student5", "biology");
-addAllStudentsToSubject("mathematics");
+const asignToTeach = (targetTeacher, targetSubject) => {
+  subjects.forEach((subject) => {
+    if (subject.name !== targetSubject) return; //early return for other subjects
 
+    if (subject.name === targetSubject) {
+      if (!subject.teachers.includes(targetTeacher)) {
+        subject.addTeacher(targetTeacher);
+      }
+
+      teachers.forEach((teacher) => {
+        if (teacher.name !== targetTeacher) return; //early return for other teachers
+        if (
+          teacher.name === targetTeacher &&
+          !teacher.subjects.includes(targetSubject)
+        ) {
+          teacher.addSubject(targetSubject);
+        }
+      });
+    }
+  });
+};
+
+console.log("===== Start of term =====");
+registerAllStudentsToSchool();
+registerAllTeachersToSchool();
+enrollAllStudentsToSubject("mathematics");
+enrollAllStudentsToSubject("mathematics");
+enrollStudentToSubject("student1", "chemistry");
+enrollStudentToSubject("student1", "chemistry");
+enrollStudentToSubject("student2", "chemistry");
+enrollStudentToSubject("student3", "chemistry");
+enrollStudentToSubject("student3", "biology");
+enrollStudentToSubject("student4", "biology");
+enrollStudentToSubject("student5", "biology");
+asignToTeach("teacher1", "mathematics");
+asignToTeach("teacher1", "chemistry");
+asignToTeach("teacher2", "biology");
+asignToTeach("teacher2", "chemistry");
+
+console.log("School details");
 console.log(teknikhogskolan);
+console.log("Subjects details");
 console.log(subjects);
+console.log("Students details");
 console.log(students);
+console.log("Teachers details");
+console.log(teachers);
 
 /*export const addStudent = (_this, student) => {
   _this.students.push(student);
