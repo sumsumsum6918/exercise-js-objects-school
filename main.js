@@ -25,19 +25,31 @@ const addAllStudentsToSubject = (targetSubject) => {
       students.forEach((student) => {
         subject.addStudent(student);
       });
+
+      students.forEach((student) => {
+        if (student.subjects) student.enlistToSubject(targetSubject);
+      });
     }
   });
 };
 
-const addAllStudentToSchool = () => {
+const addAllStudentsToSchool = () => {
   teknikhogskolan.students = [];
   students.forEach((student) => {
     teknikhogskolan.addStudent(student.name);
   });
 };
 
+const addAllTeachersToSchool = () => {
+  teknikhogskolan.teachers = [];
+  teachers.forEach((teacher) => {
+    teknikhogskolan.addTeacher(teacher.name);
+  });
+};
+
 console.log("Start of term");
-addAllStudentToSchool();
+addAllStudentsToSchool();
+addAllTeachersToSchool();
 addAllStudentsToSubject("mathematics");
 addStudentToSubject("student1", "chemistry");
 addStudentToSubject("student2", "chemistry");
@@ -49,6 +61,7 @@ addAllStudentsToSubject("mathematics");
 
 console.log(teknikhogskolan);
 console.log(subjects);
+console.log(students);
 
 /*export const addStudent = (_this, student) => {
   _this.students.push(student);
