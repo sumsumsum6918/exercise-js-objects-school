@@ -80,9 +80,45 @@ const asignToTeach = (targetTeacher, targetSubject) => {
   });
 };
 
-const removeStudentFromSubject = (targetStudent, targetSubject) => {};
+const removeStudentFromSubject = (targetStudent, targetSubject) => {
+  subjects.forEach((subject) => {
+    if (subject.name !== targetSubject) return; //early return for other subjects
 
-const removeTeahcerFromSubject = (targetTeacher, targetSubject) => {};
+    if (subject.name === targetSubject) {
+      const index = subject.students.indexOf(targetStudent);
+      if (index > -1) subject.students.splice(index, 1);
+    }
+
+    students.forEach((student) => {
+      if (student.name !== targetStudent) return; //early return for other students
+
+      if (student.name === targetStudent) {
+        const index = student.subjects.indexOf(targetSubject);
+        if (index > -1) student.subjects.splice(index, 1);
+      }
+    });
+  });
+};
+
+const removeTeahcerFromSubject = (targetTeacher, targetSubject) => {
+  subjects.forEach((subject) => {
+    if (subject.name !== targetSubject) return; //early return for other subjects
+
+    if (subject.name === targetSubject) {
+      const index = subject.teachers.indexOf(targetTeacher);
+      if (index > -1) subject.teachers.splice(index, 1);
+    }
+
+    teachers.forEach((teacher) => {
+      if (teacher.name !== targetTeacher) return; //early return for other teachers
+
+      if (teacher.name === targetTeacher) {
+        const index = teacher.subjects.indexOf(targetSubject);
+        if (index > -1) teacher.subjects.splice(index, 1);
+      }
+    });
+  });
+};
 
 console.log("===== Start of term =====");
 //#region start of term
@@ -115,8 +151,9 @@ console.log(teachers);
 console.log(
   "===== Beginning of term: Students change their choice of subjects ====="
 );
-//removeStudentFromSubject("student1", "chemistry")
-//removeTeahcerFromSubject("teacher1", "chemistry")
+removeStudentFromSubject("student1", "chemistry");
+removeStudentFromSubject("student3", "biology");
+removeTeahcerFromSubject("teacher1", "chemistry");
 
 /*export const addStudent = (_this, student) => {
   _this.students.push(student);
