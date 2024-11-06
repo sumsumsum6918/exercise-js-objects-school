@@ -15,160 +15,133 @@ const callDetails = () => {
 };
 
 const enrollStudentToSubject = (targetStudent, targetSubject) => {
-  subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return; //early return for other subjects
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+  if (!subjectObject.students.includes(targetStudent))
+    subjectObject.addStudent(targetStudent);
 
-    if (subject.name === targetSubject) {
-      if (!subject.students.includes(targetStudent)) {
-        subject.addStudent(targetStudent);
-      }
-
-      students.forEach((student) => {
-        if (student.name !== targetStudent) return; //early return for other students
-        if (
-          student.name === targetStudent &&
-          !student.subjects.includes(targetSubject)
-        ) {
-          student.enlistToSubject(targetSubject);
-        }
-      });
-    }
-  });
+  const studentObject = students.find(
+    (student) => student.name === targetStudent
+  );
+  if (!studentObject.subjects.includes(targetSubject))
+    studentObject.enlistToSubject(targetSubject);
 };
 
 const enrollAllStudentsToSubject = (targetSubject) => {
-  subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return; //early return for other subjects
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+  subjectObject.students = students.map((student) => student.name);
 
-    if (subject.name === targetSubject) {
-      subject.students = []; //reset array to prevent doubling values and double calling same function
-      students.forEach((student) => {
-        subject.addStudent(student.name);
-      });
-
-      students.forEach((student) => {
-        //enroll the subject to students details
-        if (!student.subjects.includes(targetSubject))
-          student.enlistToSubject(targetSubject);
-      });
-    }
+  students.forEach((student) => {
+    //enroll the subject to students details
+    if (!student.subjects.includes(targetSubject))
+      student.enlistToSubject(targetSubject);
   });
 };
 
 const registerAllStudentsToSchool = () => {
   teknikhogskolan.students = [];
   students.forEach((student) => {
-    teknikhogskolan.addStudent(student.name);
+    teknikhogskolan.addStudent(student);
   });
 };
 
 const registerAllTeachersToSchool = () => {
   teknikhogskolan.teachers = [];
   teachers.forEach((teacher) => {
-    teknikhogskolan.addTeacher(teacher.name);
+    teknikhogskolan.addTeacher(teacher);
   });
 };
 
 const asignToTeach = (targetTeacher, targetSubject) => {
-  subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return; //early return for other subjects
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+  if (!subjectObject.teachers.includes(targetTeacher))
+    subjectObject.addTeacher(targetTeacher);
 
-    if (subject.name === targetSubject) {
-      if (!subject.teachers.includes(targetTeacher)) {
-        subject.addTeacher(targetTeacher);
-      }
-
-      teachers.forEach((teacher) => {
-        if (teacher.name !== targetTeacher) return; //early return for other teachers
-        if (
-          teacher.name === targetTeacher &&
-          !teacher.subjects.includes(targetSubject)
-        ) {
-          teacher.addSubject(targetSubject);
-        }
-      });
-    }
-  });
+  const teacherObject = teachers.find(
+    (teacher) => teacher.name === targetTeacher
+  );
+  if (!teacherObject.subjects.includes(targetSubject))
+    teacherObject.addSubject(targetSubject);
 };
 
 const removeStudentFromSubject = (targetStudent, targetSubject) => {
-  subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return; //early return for other subjects
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+  const studentIndex = subjectObject.students.indexOf(targetStudent);
+  if (studentIndex > -1) subjectObject.students.splice(studentIndex, 1);
 
-    if (subject.name === targetSubject) {
-      const index = subject.students.indexOf(targetStudent);
-      if (index > -1) subject.students.splice(index, 1);
-    }
-
-    students.forEach((student) => {
-      if (student.name !== targetStudent) return; //early return for other students
-
-      if (student.name === targetStudent) {
-        const index = student.subjects.indexOf(targetSubject);
-        if (index > -1) student.subjects.splice(index, 1);
-      }
-    });
-  });
+  const studentObject = students.find(
+    (student) => student.name === targetStudent
+  );
+  const subjectIndex = studentObject.subjects.indexOf(targetSubject);
+  if (subjectIndex > -1) studentObject.subjects.splice(subjectIndex, 1);
 };
 
 const removeTeacherFromSubject = (targetTeacher, targetSubject) => {
-  subjects.forEach((subject) => {
-    if (subject.name !== targetSubject) return; //early return for other subjects
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+  const teacherIndex = subjectObject.teachers.indexOf(targetTeacher);
+  if (teacherIndex > -1) subjectObject.teachers.splice(teacherIndex, 1);
 
-    if (subject.name === targetSubject) {
-      const index = subject.teachers.indexOf(targetTeacher);
-      if (index > -1) subject.teachers.splice(index, 1);
+  const teacherObject = teachers.find(
+    (teacher) => teacher.name === targetTeacher
+  );
+  const subjectIndex = teacherObject.subjects.indexOf(targetSubject);
+  if (subjectIndex > -1) teacherObject.subjects.splice(subjectIndex, 1);
+};
+
+const personQuit = (people, category) => (targetName) => {
+  const index = people.findIndex(
+    (personObject) => personObject.name === targetName
+  );
+
+  const correspondingSubjects = people[index].subjects;
+
+  if (index > -1) people.splice(index, 1);
+
+  teknikhogskolan[category] = people;
+
+  correspondingSubjects.forEach((targetSubject) => {
+    const subjectObject = subjects.find(
+      (subject) => subject.name === targetSubject
+    );
+    const index = subjectObject[category].indexOf(targetName);
+    if (index > -1) subjectObject[category].splice(index, 1);
+  });
+};
+
+const studentQuit = personQuit(students, "students");
+const teacherQuit = personQuit(teachers, "teachers");
+
+const displayEachCategory = (category) => {
+  const display = [];
+  teknikhogskolan[category].forEach((person) => {
+    for (const key in person) {
+      display.push(person[key]);
     }
-
-    teachers.forEach((teacher) => {
-      if (teacher.name !== targetTeacher) return; //early return for other teachers
-
-      if (teacher.name === targetTeacher) {
-        const index = teacher.subjects.indexOf(targetSubject);
-        if (index > -1) teacher.subjects.splice(index, 1);
-      }
-    });
   });
+  return display;
 };
 
-const studentQuit = (targetName) => {
-  const indexInSchool = teknikhogskolan.students.indexOf(targetName);
-  teknikhogskolan.students.splice(indexInSchool, 1);
-
-  const index = students.findIndex((object) => object.name === targetName);
-  const correspondSubjects = students[index].subjects;
-
-  if (index > -1) students.splice(index, 1);
-
-  correspondSubjects.forEach((removingSubject) => {
-    subjects.forEach((subject) => {
-      if (removingSubject !== subject.name) return;
-      if (removingSubject === subject.name) {
-        const index = subject.students.indexOf(targetName);
-        if (index > -1) subject.students.splice(index, 1);
-      }
-    });
-  });
+const displayAllSubjectsOfStudent = (targetStudent) => {
+  const studentObject = students.find(
+    (student) => student.name === targetStudent
+  );
+  return studentObject.subjects;
 };
 
-const teacherQuit = (targetName) => {
-  const indexInSchool = teknikhogskolan.teachers.indexOf(targetName);
-  teknikhogskolan.teachers.splice(indexInSchool, 1);
-
-  const index = teachers.findIndex((object) => object.name === targetName);
-  const correspondSubjects = teachers[index].subjects;
-
-  if (index > -1) teachers.splice(index, 1);
-
-  correspondSubjects.forEach((removingSubject) => {
-    subjects.forEach((subject) => {
-      if (removingSubject !== subject.name) return;
-      if (removingSubject === subject.name) {
-        const index = subject.teachers.indexOf(targetName);
-        if (index > -1) subject.teachers.splice(index, 1);
-      }
-    });
-  });
+const displayAllStudentsOfSubject = (targetSubject) => {
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+  return subjectObject.students;
 };
 
 //#region calling functions
@@ -195,6 +168,7 @@ const duringTermTime = () => {
 const startingdetails = () => {
   registerAllStudentsToSchool();
   registerAllTeachersToSchool();
+  enrollAllStudentsToSubject("mathematics");
   enrollAllStudentsToSubject("mathematics");
   enrollStudentToSubject("student1", "chemistry");
   enrollStudentToSubject("student1", "chemistry");
@@ -229,7 +203,10 @@ I have chosen to aviod the console problem with the method suggested.
 */
 //startOfTermDetails();
 //firstWeekOfTermDetails();
-//duringTermTime();
+duringTermTime();
+
+//console.log(displayEachCategory("students"));
+//console.log(displayAllSubjectsOfStudent("student2"));
 
 /*export const addStudent = (_this, student) => {
   _this.students.push(student);

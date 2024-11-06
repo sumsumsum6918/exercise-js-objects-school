@@ -9,6 +9,7 @@ export const subjects = [
     addTeacher: function (teacher) {
       this.teachers.push(teacher);
     },
+    grades: {},
   },
   {
     name: "chemistry",
@@ -20,6 +21,7 @@ export const subjects = [
     addTeacher: function (teacher) {
       this.teachers.push(teacher);
     },
+    grades: {},
   },
   {
     name: "biology",
@@ -31,5 +33,6 @@ export const subjects = [
     addTeacher: function (teacher) {
       this.teachers.push(teacher);
     },
+    grades: {},
   },
 ];
