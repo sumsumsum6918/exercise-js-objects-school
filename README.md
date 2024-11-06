@@ -11,4 +11,5 @@ Better attempt i believe would be to create new object with .map() when we modif
 startOfTermDetails();
 firstWeekOfTermDetails();
 duringTermTime();
+afterMidTerm();
 ```

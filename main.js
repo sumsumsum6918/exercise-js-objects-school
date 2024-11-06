@@ -116,7 +116,6 @@ const personQuit = (people, category) => (targetName) => {
     if (index > -1) subjectObject[category].splice(index, 1);
   });
 };
-
 const studentQuit = personQuit(students, "students");
 const teacherQuit = personQuit(teachers, "teachers");
 
@@ -165,6 +164,17 @@ const duringTermTime = () => {
   changes2();
   callDetails();
 };
+const afterMidTerm = () => {
+  console.log(
+    "===== After Mid-term: Student gets grades from each subject ====="
+  );
+  startingdetails();
+  changes1();
+  changes2();
+  changes3();
+  callDetails();
+};
+
 const startingdetails = () => {
   registerAllStudentsToSchool();
   registerAllTeachersToSchool();
@@ -190,20 +200,15 @@ const changes1 = () => {
 const changes2 = () => {
   studentQuit("student5");
   teacherQuit("teacher1");
+  asignToTeach("teacher2", "mathematics");
 };
+const changes3 = () => {};
 //#endregion
 
-/* Since the objects are later modified,
-the console reflects the updated version of objects
-even if the changes was applied after the console.log call
-it is that only one function from below is call at one time.
-Better attempt i believe would be to create new object with .map() when we modify something
-but since the exercise insisted on having functions in the objects,
-I have chosen to aviod the console problem with the method suggested.
-*/
 //startOfTermDetails();
 //firstWeekOfTermDetails();
-duringTermTime();
+//duringTermTime();
+afterMidTerm();
 
 //console.log(displayEachCategory("students"));
 //console.log(displayAllSubjectsOfStudent("student2"));
