@@ -7,7 +7,7 @@ export const students = [
     enlistToSubject: function (subject) {
       this.subjects.push(subject);
     },
-    grades: {},
+    grades: [],
   },
   {
     name: "student2",
@@ -17,7 +17,7 @@ export const students = [
     enlistToSubject: function (subject) {
       this.subjects.push(subject);
     },
-    grades: {},
+    grades: [],
   },
   {
     name: "student3",
@@ -27,7 +27,7 @@ export const students = [
     enlistToSubject: function (subject) {
       this.subjects.push(subject);
     },
-    grades: {},
+    grades: [],
   },
   {
     name: "student4",
@@ -37,7 +37,7 @@ export const students = [
     enlistToSubject: function (subject) {
       this.subjects.push(subject);
     },
-    grades: {},
+    grades: [],
   },
   {
     name: "student5",
@@ -47,6 +47,6 @@ export const students = [
     enlistToSubject: function (subject) {
       this.subjects.push(subject);
     },
-    grades: {},
+    grades: [],
   },
 ];

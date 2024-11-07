@@ -143,6 +143,55 @@ const displayAllStudentsOfSubject = (targetSubject) => {
   return subjectObject.students;
 };
 
+const inputExamResults = (targetSubject, targetStudent, targetGrade) => {
+  const studentObject = students.find(
+    (student) => student.name === targetStudent
+  );
+  const studentGradesObject = {};
+
+  studentGradesObject.subject = targetSubject;
+  studentGradesObject.grade = targetGrade;
+
+  studentObject.grades.push(studentGradesObject);
+
+  const subjectObject = subjects.find(
+    (subject) => subject.name === targetSubject
+  );
+
+  const subjectGradesObject = {};
+
+  subjectGradesObject.student = targetStudent;
+  subjectGradesObject.grade = targetGrade;
+
+  subjectObject.grades.push(subjectGradesObject);
+};
+
+const newStudent = (studentName, studentAge, studentGender) => {
+  const newStudentObject = {};
+
+  newStudentObject.name = studentName;
+  newStudentObject.age = studentAge;
+  newStudentObject.gender = studentGender;
+  newStudentObject.subjects = [];
+  newStudentObject.enlistToSubject = function (subject) {
+    this.subjects.push(subject);
+  };
+  newStudentObject.grades = [];
+
+  students.push(newStudentObject);
+};
+
+const newTeacher = (teacherName) => {
+  const newTecherObject = {};
+
+  newTecherObject.name = teacherName;
+  newTecherObject.subjects = [];
+  newTecherObject.addSubject = function (subject) {
+    this.subjects.push(subject);
+  };
+  teachers.push(newTecherObject);
+};
+
 //#region calling functions
 const startOfTermDetails = () => {
   console.log("===== Start of term =====");
@@ -202,7 +251,27 @@ const changes2 = () => {
   teacherQuit("teacher1");
   asignToTeach("teacher2", "mathematics");
 };
-const changes3 = () => {};
+const changes3 = () => {
+  inputExamResults("mathematics", "student1", "A");
+  inputExamResults("mathematics", "student2", "B");
+  inputExamResults("mathematics", "student3", "A");
+  inputExamResults("mathematics", "student4", "A");
+  inputExamResults("chemistry", "student2", "C");
+  inputExamResults("chemistry", "student3", "A");
+  inputExamResults("biology", "student4", "B");
+
+  newStudent("student6", 17, "M");
+  newStudent("student7", 23, "M");
+
+  enrollStudentToSubject("student6", "mathematics");
+  enrollStudentToSubject("student6", "biology");
+  enrollStudentToSubject("student7", "mathematics");
+  enrollStudentToSubject("student7", "biology");
+  enrollStudentToSubject("student7", "chemistry");
+
+  newTeacher("teacher3");
+  asignToTeach("teacher3", "mathematics");
+};
 //#endregion
 
 //startOfTermDetails();
@@ -215,9 +284,8 @@ afterMidTerm();
 
 /*export const addStudent = (_this, student) => {
   _this.students.push(student);
-};*/
+};
 
-/*
 const addSubjectToTeacher = (addSubject, targetTeacher) => {
   let matchingSubject = "";
   subjects.forEach((subject) => {
