@@ -13,3 +13,7 @@ firstWeekOfTermDetails();
 duringTermTime();
 afterMidTerm();
 ```
+
+Link to OOp
+
+https://github.com/sumsumsum6918/exercise-js-objects-school-oop
